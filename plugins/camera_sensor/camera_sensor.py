@@ -64,15 +64,18 @@ class Camera_sensor(Plugin):
 
     def setup(self):
         ''' Set up the palettes '''
+        '''
         sensors_palette = make_palette('sensor',
                                        colors=["#FF6060", "#A06060"],
                                        help_string=_(
                                            'Palette of sensor blocks'),
                                        position=6)
+        '''
         media_palette = make_palette('media',
                                      colors=["#A0FF00", "#80A000"],
                                      help_string=_('Palette of media objects'),
                                      position=7)
+        sensors_palette = media_palette
 
         # set up camera-specific blocks
         media_blocks_dictionary['camera'] = self.prim_take_picture0
@@ -86,6 +89,11 @@ class Camera_sensor(Plugin):
             hidden = False
             if len(self.devices) > 1:
                 second_cam = True
+
+        # ++ Turtle Confusion
+        hidden = True
+        second_cam = False
+        # -- Turtle Confusion
 
         sensors_palette.add_block('luminance',
                                   hidden=hidden,
