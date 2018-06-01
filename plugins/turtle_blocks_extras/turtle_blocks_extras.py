@@ -147,7 +147,6 @@ boolean operators from Numbers palette'))
         MEDIA_SHAPES.append('journalon')
 
         palette.add_block('audio',
-                          hidden=True,
                           style='box-style-media',
                           label=' ',
                           special_name=_('audio'),
@@ -160,7 +159,6 @@ boolean operators from Numbers palette'))
         MEDIA_SHAPES.append('audioon')
 
         palette.add_block('video',
-                          hidden=True,
                           style='box-style-media',
                           label=' ',
                           special_name=_('video'),
@@ -173,7 +171,6 @@ boolean operators from Numbers palette'))
         MEDIA_SHAPES.append('videoon')
 
         palette.add_block('description',
-                          hidden=True,
                           style='box-style-media',
                           label=' ',
                           special_name=_('description'),
@@ -269,7 +266,6 @@ in the Sugar Journal'))
                                       return_type=TYPE_NUMBER))
 
         palette.add_block('mediawait',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('media wait'),
                           prim_name='mediawait',
@@ -278,7 +274,6 @@ complete'))
         self.tw.lc.def_prim('mediawait', 0, self.tw.lc.media_wait, True)
 
         palette.add_block('mediastop',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('media stop'),
                           prim_name='mediastop',
@@ -286,7 +281,6 @@ complete'))
         self.tw.lc.def_prim('mediastop', 0, self.tw.lc.media_stop, True)
 
         palette.add_block('mediapause',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('media pause'),
                           prim_name='mediapause',
@@ -294,7 +288,6 @@ complete'))
         self.tw.lc.def_prim('mediapause', 0, self.tw.lc.media_pause, True)
 
         palette.add_block('mediaplay',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('media resume'),
                           prim_name='mediaplay',
@@ -312,7 +305,6 @@ complete'))
                                       arg_descs=[ArgSlot(TYPE_STRING)]))
 
         palette.add_block('sinewave',
-                          hidden=True,
                           style='basic-style-3arg',
                           # TRANS: pitch, duration, amplitude
                           label=[_('sinewave') + '\n\n', _('pitch'),
@@ -329,19 +321,11 @@ amplitude, and duration (in seconds)'))
 
     def _sensor_palette(self):
 
-        palette = make_palette('extras',
-                               colors=["#FF0000", "#A00000"],
-                               help_string=_('Palette of extra options'),
-                               position=8,
-                               translation=_('extras'))
-
-        '''
         palette = make_palette('sensor',
                                colors=["#FF6060", "#A06060"],
                                help_string=_('Palette of sensor blocks'),
                                position=6,
                                translation=_('sensor'))
-        '''
 
         palette.add_block('mousebutton',
                           hidden=True,
@@ -356,7 +340,6 @@ pressed'))
                                       return_type=TYPE_NUMBER))
 
         palette.add_block('mousebutton2',
-                          hidden=True,
                           style='boolean-block-style',
                           label=_('button down'),
                           prim_name='mousebutton2',
@@ -368,7 +351,6 @@ pressed'))
                                       return_type=TYPE_BOOL))
 
         palette.add_block('mousex',
-                          hidden=True,
                           style='box-style',
                           label=_('mouse x'),
                           prim_name='mousex',
@@ -380,7 +362,6 @@ pressed'))
                                       call_afterwards=self.after_mouse_x))
 
         palette.add_block('mousey',
-                          hidden=True,
                           style='box-style',
                           label=_('mouse y'),
                           prim_name='mousey',
@@ -392,7 +373,6 @@ pressed'))
                                       call_afterwards=self.after_mouse_y))
 
         palette.add_block('kbinput',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('query keyboard'),
                           prim_name='kbinput',
@@ -403,7 +383,6 @@ stored in keyboard block)'))
                                       call_afterwards=self.after_keypress))
 
         palette.add_block('keyboard',
-                          hidden=True,
                           style='box-style',
                           label=_('keyboard'),
                           prim_name='keyboard',
@@ -416,7 +395,6 @@ block as ASCII'))
                                       return_type=TYPE_NUMBER))
 
         palette.add_block('readpixel',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('read pixel'),
                           prim_name='readpixel',
@@ -427,7 +405,6 @@ to the stack'))
                             Primitive(Turtle.read_pixel))
 
         palette.add_block('see',
-                          hidden=True,
                           style='box-style',
                           label=_('turtle sees'),
                           value_block=True,
@@ -440,7 +417,6 @@ to the stack'))
                                       call_afterwards=self.after_see))
 
         palette.add_block('time',
-                          hidden=True,
                           style='box-style',
                           label=_('time'),
                           prim_name='time',
@@ -475,7 +451,6 @@ program started'))
                                translation=_('extras'))
 
         palette.add_block('push',
-                          hidden=True,
                           style='basic-style-1arg',
                           #TRANS: push adds a new item to the program stack
                           label=_('push'),
@@ -492,7 +467,6 @@ last-out heap)'))
 :foo :taheap\nend\nmake "taheap []\n')
 
         palette.add_block('printheap',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('show heap'),
                           prim_name='printheap',
@@ -508,7 +482,6 @@ last-out heap)'))
 end\n')
 
         palette.add_block('clearheap',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('empty heap'),
                           prim_name='clearheap',
@@ -522,7 +495,6 @@ heap)'))
 end\n')
 
         palette.add_block('pop',
-                          hidden=True,
                           style='box-style',
                           #TRANS: pop removes a new item from the program stack
                           label=_('pop'),
@@ -555,7 +527,6 @@ make "tmp first :taheap\nmake "taheap butfirst :taheap\noutput :tmp\nend\n')
                                                   return_type=TYPE_BOOL))]))]))
 
         palette.add_block('saveheap',
-                          hidden=True,
                           style='basic-style-1arg',
                           label=_('save heap to file'),
                           default=_('filename'),
@@ -569,8 +540,8 @@ last-out heap) to a file'))
 
         if self.tw.running_sugar:
             palette.add_block('loadheap',
-                              hidden=True,
                               style='basic-style-1arg',
+                              hidden=True,
                               label=_('load heap from file'),
                               default=_('filename'),
                               prim_name='loadheap',
@@ -578,14 +549,12 @@ last-out heap) to a file'))
 last-out heap) from a file'))
             # macro
             palette.add_block('loadheapfromjournal',
-                              hidden=True,
                               style='basic-style-1arg',
                               label=_('load heap from file'),
                               help_string=_('loads FILO (first-in \
 last-out heap) from a file'))
         else:
             palette.add_block('loadheap',
-                              hidden=True,
                               style='basic-style-1arg',
                               label=_('load heap from file'),
                               default=_('filename'),
@@ -599,7 +568,6 @@ last-out heap) from a file'))
                                       call_afterwards=self.after_push))
 
         palette.add_block('isheapempty2',
-                          hidden=True,
                           style='boolean-block-style',
                           label=_('empty heap?'),
                           prim_name='isheapempty2',
@@ -615,7 +583,6 @@ last-out heap) from a file'))
                                     return_type=TYPE_BOOL))]))
 
         palette.add_block('comment',
-                          hidden=True,
                           style='basic-style-1arg',
                           label=_('comment'),
                           prim_name='comment',
@@ -640,7 +607,6 @@ bottom of the screen'))
                       arg_descs=[ArgSlot(TYPE_OBJECT), ConstantArg(False)]))
 
         palette.add_block('chr',
-                          hidden=True,
                           style='number-style-1arg',
                           label='chr',
                           prim_name='chr',
@@ -651,7 +617,6 @@ bottom of the screen'))
                       arg_descs=[ArgSlot(TYPE_INT)]))
 
         palette.add_block('int',
-                          hidden=True,
                           style='number-style-1arg',
                           label='int',
                           prim_name='int',
@@ -664,7 +629,6 @@ bottom of the screen'))
                       arg_descs=[ArgSlot(TYPE_INT)]))
 
         palette.add_block('polar',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('polar'),
                           prim_name='polar',
@@ -673,7 +637,6 @@ bottom of the screen'))
                             lambda self: self.tw.set_polar(True))
 
         palette.add_block('myfunc1arg',
-                          hidden=True,
                           style='number-style-var-arg',
                           label=[_('Python'), 'f(x)', 'x'],
                           prim_name='myfunction',
@@ -719,7 +682,6 @@ advanced multi-variable math equations, e.g., sin(x+y+z)'))
                                  ArgSlot(TYPE_FLOAT), ArgSlot(TYPE_FLOAT)]))
 
         palette.add_block('cartesian',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('Cartesian'),
                           prim_name='cartesian',
@@ -728,7 +690,6 @@ advanced multi-variable math equations, e.g., sin(x+y+z)'))
                             lambda self: self.tw.set_cartesian(True))
 
         palette.add_block('userdefined',
-                          hidden=True,
                           style='basic-style-var-arg',
                           label=' ',
                           prim_name='userdefined',
@@ -784,7 +745,6 @@ module found in the Journal'))
         MEDIA_SHAPES.append('pythonon')
 
         palette.add_block('getfromurl',
-                          hidden=True,
                           style='number-style-1arg',
                           #TRANS: URL is universal resource locator
                           label=_('URL'),
@@ -811,13 +771,11 @@ _('gets a text string or an image from a URL'))
 
         # macro
         palette.add_block('reskin',
-                          hidden=True,
                           style='basic-style-1arg',
                           label=_('turtle shell'),
                           help_string=_("put a custom 'shell' on the turtle"))
 
         palette.add_block('addturtle',
-                          hidden=True,
                           style='basic-style-1arg',
                           label=_('turtle'),
                           prim_name='addturtle',
@@ -829,7 +787,6 @@ _('gets a text string or an image from a URL'))
                                       arg_descs=[ArgSlot(TYPE_STRING)]))
 
         palette.add_block('turtlex',
-                          hidden=True,
                           style='number-style-1arg',
                           label=_('turtle x'),
                           prim_name='turtlex',
@@ -842,7 +799,6 @@ _('gets a text string or an image from a URL'))
                       return_type=TYPE_BOX))
 
         palette.add_block('turtley',
-                          hidden=True,
                           style='number-style-1arg',
                           label=_('turtle y'),
                           prim_name='turtley',
@@ -855,7 +811,6 @@ _('gets a text string or an image from a URL'))
                       return_type=TYPE_BOX))
 
         palette.add_block('activeturtle',
-                          hidden=True,
                           style='box-style',
                           label=_('active turtle'),
                           prim_name='activeturtle',
@@ -867,7 +822,6 @@ _('gets a text string or an image from a URL'))
                       return_type=TYPE_BOX))
 
         palette.add_block('turtleh',
-                          hidden=True,
                           style='number-style-1arg',
                           label=_('turtle heading'),
                           prim_name='turtleh',
@@ -888,7 +842,6 @@ _('gets a text string or an image from a URL'))
                           help_string=_('top of a collapsed stack'))
 
         palette.add_block('loadpalette',
-                          hidden=True,
                           style='basic-style-1arg',
                           string_or_number=True,
                           label=_('select palette'),
@@ -901,7 +854,6 @@ _('gets a text string or an image from a URL'))
                                       arg_descs=[ArgSlot(TYPE_STRING)]))
 
         palette.add_block('loadblock',
-                          hidden=True,
                           style='basic-style-var-arg',
                           label=_('load'),
                           prim_name='loadblock',
@@ -943,22 +895,14 @@ _('gets a text string or an image from a URL'))
 
     def _portfolio_palette(self):
 
-        palette = make_palette('extras',
-                               colors=["#FF0000", "#A00000"],
-                               help_string=_('Palette of extra options'),
-                               position=8,
-                               translation=_('extras'))
-        '''
         palette = make_palette('portfolio',
                                colors=["#0606FF", "#0606A0"],
                                help_string=_('Palette of presentation \
 templates'),
                                position=9,
                                translation=_('portfolio'))
-        '''
 
         palette.add_block('hideblocks',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('hide blocks'),
                           prim_name='hideblocks',
@@ -968,7 +912,6 @@ templates'),
             Primitive(self._prim_hideblocks, export_me=False))
 
         palette.add_block('showblocks',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('show blocks'),
                           prim_name='showblocks',
@@ -978,7 +921,6 @@ templates'),
             Primitive(self._prim_showblocks, export_me=False))
 
         palette.add_block('fullscreen',
-                          hidden=True,
                           style='basic-style-extended-vertical',
                           label=_('Fullscreen').lower(),
                           prim_name='fullscreen',
@@ -1002,7 +944,6 @@ templates'),
 
         # macros
         palette.add_block('picturelist',
-                          hidden=True,
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: list of \
@@ -1010,7 +951,6 @@ bullets'))
         MEDIA_SHAPES.append('list')
 
         palette.add_block('picture1x1a',
-                          hidden=True,
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: select \
@@ -1018,7 +958,6 @@ Journal object (no description)'))
         MEDIA_SHAPES.append('1x1a')
 
         palette.add_block('picture1x1',
-                          hidden=True,
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: select \
@@ -1026,7 +965,6 @@ Journal object (with description)'))
         MEDIA_SHAPES.append('1x1')
 
         palette.add_block('picture2x2',
-                          hidden=True,
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: select four \
@@ -1034,7 +972,6 @@ Journal objects'))
         MEDIA_SHAPES.append('2x2')
 
         palette.add_block('picture2x1',
-                          hidden=True,
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: select two \
@@ -1042,7 +979,6 @@ Journal objects'))
         MEDIA_SHAPES.append('2x1')
 
         palette.add_block('picture1x2',
-                          hidden=True,
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: select two \

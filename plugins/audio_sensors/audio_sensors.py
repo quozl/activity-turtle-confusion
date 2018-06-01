@@ -76,22 +76,13 @@ class Audio_sensors(Plugin):
         self.input_step = 1
         self.ringbuffer = []
 
-        palette = make_palette('extras',
-                               colors=["#FF0000", "#A00000"],
-                               help_string=_('Palette of extra options'),
-                               position=8,
-                               translation=_('extras'))
-        '''
         palette = make_palette('sensor',
                                colors=["#FF6060", "#A06060"],
                                help_string=_('Palette of sensor blocks'),
                                position=6)
-        '''
         hidden = True
-        '''
         if self._status:
             hidden = False
-        '''
 
         palette.add_block('sound',
                           hidden=hidden,
@@ -123,10 +114,8 @@ class Audio_sensors(Plugin):
                       call_afterwards=self.after_volume))
 
         hidden = True
-        '''
         if PITCH_AVAILABLE and self._status:
             hidden = False
-        '''
 
         palette.add_block('pitch',
                           hidden=hidden,
