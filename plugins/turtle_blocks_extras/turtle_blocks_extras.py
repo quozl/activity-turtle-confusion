@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#Copyright (c) 2012, Walter Bender
+# Copyright (c) 2012, Walter Bender
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,10 +15,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-from time import time
 import os
-import glob
-
+import tempfile
+from time import time
 from gettext import gettext as _
 
 from plugins.plugin import Plugin
@@ -29,7 +28,8 @@ from TurtleArt.taconstants import (CONSTANTS, MACROS, KEY_DICT, MEDIA_SHAPES,
                                    BLOCKS_WITH_SKIN, PYTHON_SKIN,
                                    MEDIA_BLOCK2TYPE, VOICES)
 from TurtleArt.tautils import (debug_output, get_path, data_to_string,
-                               hat_on_top, listify, data_from_file)
+                               hat_on_top, listify, data_from_file,
+                               get_endswith_files)
 from TurtleArt.taprimitive import (ArgSlot, ConstantArg, Primitive)
 from TurtleArt.tatype import (TYPE_BOOL, TYPE_BOX, TYPE_CHAR, TYPE_INT,
                               TYPE_FLOAT, TYPE_OBJECT, TYPE_STRING,
@@ -147,6 +147,7 @@ boolean operators from Numbers palette'))
         MEDIA_SHAPES.append('journalon')
 
         palette.add_block('audio',
+                          hidden=True,
                           style='box-style-media',
                           label=' ',
                           special_name=_('audio'),
@@ -159,6 +160,7 @@ boolean operators from Numbers palette'))
         MEDIA_SHAPES.append('audioon')
 
         palette.add_block('video',
+                          hidden=True,
                           style='box-style-media',
                           label=' ',
                           special_name=_('video'),
@@ -171,6 +173,7 @@ boolean operators from Numbers palette'))
         MEDIA_SHAPES.append('videoon')
 
         palette.add_block('description',
+                          hidden=True,
                           style='box-style-media',
                           label=' ',
                           special_name=_('description'),
@@ -230,6 +233,17 @@ Journal'))
                       arg_descs=[ArgSlot(TYPE_NUMBER)],
                       call_afterwards=lambda value: self.after_set(
                           'scale', value)))
+
+        palette.add_block(
+            'setfont',
+            style='basic-style-1arg',
+            label=_('set font'),
+            prim_name='setfont',
+            default='Sans',
+            help_string=_('sets the font used by the show block'))
+        self.tw.lc.def_prim('setfont', 1,
+                            Primitive(self.tw.canvas.set_font,
+                                      arg_descs=[ArgSlot(TYPE_STRING)]))
 
         palette.add_block('savepix',
                           style='basic-style-1arg',
@@ -452,7 +466,7 @@ program started'))
 
         palette.add_block('push',
                           style='basic-style-1arg',
-                          #TRANS: push adds a new item to the program stack
+                          # TRANS: push adds a new item to the program stack
                           label=_('push'),
                           prim_name='push',
                           logo_command='tapush',
@@ -496,7 +510,8 @@ end\n')
 
         palette.add_block('pop',
                           style='box-style',
-                          #TRANS: pop removes a new item from the program stack
+                          # TRANS: pop removes a new item from the program
+                          # stack
                           label=_('pop'),
                           prim_name='pop',
                           value_block=True,
@@ -746,17 +761,14 @@ module found in the Journal'))
 
         palette.add_block('getfromurl',
                           style='number-style-1arg',
-                          #TRANS: URL is universal resource locator
+                          # TRANS: URL is universal resource locator
                           label=_('URL'),
-                          default=\
-'http://wiki.sugarlabs.org/images/2/2c/Logo_alt_3.svg',
+                          default='http://wiki.sugarlabs.org/images/2/2c/Logo_alt_3.svg',
                           prim_name='getfromurl',
-                          help_string=\
-_('gets a text string or an image from a URL'))
+                          help_string=_('gets a text string or an image from a URL'))
         self.tw.lc.def_prim('getfromurl', 1,
                             Primitive(self.tw.lc.get_from_url,
                                       arg_descs=[ArgSlot(TYPE_STRING)]))
-
 
         palette.add_block('skin',
                           hidden=True,
@@ -893,6 +905,29 @@ _('gets a text string or an image from a URL'))
                                                  ArgSlot(TYPE_OBJECT),
                                                  ArgSlot(TYPE_OBJECT)]))
 
+        # macro
+        palette.add_block('indexblock',
+                          style='basic-style-extended-vertical',
+                          label=_('index'),
+                          help_string=_('return the text of the positions'))
+
+        palette.add_block('index',
+                          hidden=True,
+                          style='number-style-var-3arg',
+                          label=[_('index') + '\n\n', _('string'),
+                                 _('start'), _('end')],
+                          prim_name='index',
+                          default=[_('text'), 0, 1],
+                          string_or_number=True,
+                          help_string=_('return the text of the positions'))
+
+        self.tw.lc.def_prim('index', 3,
+                            Primitive(self.prim_index,
+                                      return_type=TYPE_STRING,
+                                      arg_descs=[ArgSlot(TYPE_STRING),
+                                                 ArgSlot(TYPE_INT),
+                                                 ArgSlot(TYPE_INT)]))
+
     def _portfolio_palette(self):
 
         palette = make_palette('portfolio',
@@ -930,7 +965,7 @@ templates'),
             Primitive(self.tw.set_fullscreen, export_me=False))
 
         primitive_dictionary['bulletlist'] = self._prim_list
-        palette.add_block('list',
+        palette.add_block('bulletlist',
                           hidden=True,
                           colors=["#0606FF", "#0606A0"],
                           style='bullet-style',
@@ -943,42 +978,42 @@ templates'),
                             primitive_dictionary['bulletlist'], True)
 
         # macros
-        palette.add_block('picturelist',
+        palette.add_block('list',
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: list of \
 bullets'))
         MEDIA_SHAPES.append('list')
 
-        palette.add_block('picture1x1a',
+        palette.add_block('1x1a',
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: select \
 Journal object (no description)'))
         MEDIA_SHAPES.append('1x1a')
 
-        palette.add_block('picture1x1',
+        palette.add_block('1x1',
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: select \
 Journal object (with description)'))
         MEDIA_SHAPES.append('1x1')
 
-        palette.add_block('picture2x2',
+        palette.add_block('2x2',
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: select four \
 Journal objects'))
         MEDIA_SHAPES.append('2x2')
 
-        palette.add_block('picture2x1',
+        palette.add_block('2x1',
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: select two \
 Journal objects'))
         MEDIA_SHAPES.append('2x1')
 
-        palette.add_block('picture1x2',
+        palette.add_block('1x2',
                           style='basic-style-extended',
                           label=' ',
                           help_string=_('presentation template: select two \
@@ -1130,7 +1165,7 @@ Journal objects'))
 
         if hasattr(self.tw, 'macros_path') and \
                 os.path.exists(self.tw.macros_path):
-            files = glob.glob(os.path.join(self.tw.macros_path, '*.tb'))
+            files = get_endswith_files(self.tw.macros_path, ".tb")
             if len(files) > 0:
                 palette = make_palette(
                     'myblocks',
@@ -1180,7 +1215,7 @@ Journal objects'))
 
     def prim_speak(self, text):
         """ Speak text """
-        if type(text) == float and int(text) == text:
+        if isinstance(text, float) and int(text) == text:
             text = int(text)
 
         lang = os.environ['LANG'][0:2]
@@ -1218,7 +1253,7 @@ Journal objects'))
             path = os.path.join(get_path(self.tw.activity, 'instance'),
                                 'tmp.csd')
         else:
-            path = os.path.join('/tmp', 'tmp.csd')
+            path = os.path.join(tempfile.gettempdir(), 'tmp.csd')
         # Create a csound file from the score.
         self._audio_write(path)
         # Play the csound file.
@@ -1230,7 +1265,7 @@ Journal objects'))
 
         pitenv = pitch_envelope
         ampenv = amplitude_envelope
-        if not 1 in self.instrlist:
+        if 1 not in self.instrlist:
             self.orchlines.append("instr 1\n")
             self.orchlines.append("kpitenv oscil 1, 1/p3, p6\n")
             self.orchlines.append("aenv oscil 1, 1/p3, p7\n")
@@ -1307,7 +1342,7 @@ Journal objects'))
         self.tw.lc.trace = 0
         self.tw.step_time = 0
         if self.tw.running_sugar:
-            self.tw.activity.stop_turtle_button.set_icon("hideshowoff")
+            self.tw.activity.stop_turtle_button.set_icon_name("hideshowoff")
             self.tw.activity.stop_turtle_button.set_tooltip(_('Show blocks'))
 
     def _prim_showblocks(self):
@@ -1316,7 +1351,7 @@ Journal objects'))
         self.tw.lc.trace = 1
         self.tw.step_time = 3
         if self.tw.running_sugar:
-            self.tw.activity.stop_turtle_button.set_icon("stopiton")
+            self.tw.activity.stop_turtle_button.set_icon_name("stopiton")
             self.tw.activity.stop_turtle_button.set_tooltip(_('Stop turtle'))
 
     def after_set(self, name, value=None):
@@ -1324,3 +1359,9 @@ Journal objects'))
         if value is not None:
             if self.tw.lc.update_values:
                 self.tw.lc.update_label_value(name, value)
+
+    def prim_index(self, string, start, end):
+        start = int(start)
+        end = int(end)
+
+        return string[start:end]
