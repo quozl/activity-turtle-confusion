@@ -279,7 +279,6 @@ class TurtleArtActivity(activity.Activity):
         if hasattr(self, 'get_window'):
             self.get_window().set_cursor(self._old_cursor)
 
-
     def do_save_as_python_cb(self, widget):
         ''' Callback for saving the project as Python code. '''
         self.save_as_python.set_icon_name('python-saveon')
@@ -548,9 +547,9 @@ class TurtleArtActivity(activity.Activity):
         pos = self.tw.turtles.get_active_turtle().get_xy()
         self.tw.turtles.get_active_turtle().set_xy(
             int(-Gdk.Screen.width() / 2), 0, pendown=False)
-        self.tw.lc.insert_image(center=False, resize=False,
-                                filepath=os.path.join(
-                activity.get_bundle_path(), 'images', 'turtle-a.png'))
+        self.tw.lc.insert_image(
+            center=False, resize=False, filepath=os.path.join(
+                activity.get_bundle_path(), 'images', 'turtle-a-small.png'))
         self.tw.turtles.get_active_turtle().set_xy(pos[0], pos[1],
                                                    pendown=False)
 
@@ -605,7 +604,6 @@ class TurtleArtActivity(activity.Activity):
             if hasattr(self.get_window(), 'get_cursor'):
                 self._old_cursor = self.get_window().get_cursor()
             self.get_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-        #self._create_store()
         self.tw.load_file_from_chooser(True)
         # Now that the file is loaded, restore the cursor
         _logger.debug('restoring cursor')
@@ -914,17 +912,19 @@ class TurtleArtActivity(activity.Activity):
         self.edit_toolbar_button.set_expanded(True)
         self.edit_toolbar_button.set_expanded(False)
         self.palette_toolbar_button.set_expanded(True)
+
         self._unfullscreen_button._button.connect('clicked', self.do_unfullscreen_cb)
 
     def _setup_extra_controls(self):
         ''' Add the rest of the buttons to the main toolbar '''
+
         self._make_project_buttons(self.toolbox.toolbar)
 
         self.extras_separator = self._add_separator(
             self.toolbox.toolbar, expand=False, visible=True)
 
         self.samples_button = self._add_button(
-            'ta-open', _('Load challenges'), self._create_store,
+            'ta-open-confusion', _('Load challenges'), self._create_store,
             self.toolbox.toolbar)
 
         self.toolbox.toolbar.insert(self._help_button, -1)
@@ -963,7 +963,7 @@ class TurtleArtActivity(activity.Activity):
         add_paragraph(help_box, _('Stop turtle'), icon='stopitoff')
         add_paragraph(help_box, _('Show blocks'), icon='hideshowoff')
         add_paragraph(help_box, _('Save snapshot'), icon='filesaveoff')
-        add_paragraph(help_box, _('Load example'), icon='ta-open')
+        add_paragraph(help_box, _('Load example'), icon='ta-open-confusion')
         add_paragraph(help_box, _('Help'), icon='help-toolbar')
         add_paragraph(help_box, _('Stop'), icon='activity-stop')
 
@@ -998,7 +998,7 @@ class TurtleArtActivity(activity.Activity):
         add_paragraph(help_box, _('Save as Logo'), icon='logo-saveoff')
         add_paragraph(help_box, _('Save as Python'), icon='python-saveoff')
         add_paragraph(help_box, _('Save snapshot'), icon='filesaveoff')
-        add_paragraph(help_box, _('Add project'), icon='load-from-journal')
+        add_paragraph(help_box, _('Add project'), icon='load-from-journal-confusion')
         home = os.environ['HOME']
         if activity.get_bundle_path()[0:len(home)] == home:
             add_paragraph(help_box, _('Load plugin'), icon='pluginoff')
@@ -1230,17 +1230,17 @@ class TurtleArtActivity(activity.Activity):
         # When screen is in portrait mode, the buttons don't fit
         # on the main toolbar, so put them here.
         self.samples_button2, self.samples_label2 = \
-            self._add_button_and_label('ta-open',
+            self._add_button_and_label('ta-open-confusion',
                                        _('Load example'),
                                        self.do_samples_cb,
                                        None,
                                        button_box)
 
         self.load_ta_project, label = self._add_button_and_label(
-            'load-from-journal', _('Open'),
+            'load-from-journal-confusion', _('Open'),
             self.do_load_ta_project_cb, True, button_box)
         self.load_ta_project, label = self._add_button_and_label(
-            'load-from-journal', _('Add project'),
+            'load-from-journal-confusion', _('Add project'),
             self.do_load_ta_project_cb, False, button_box)
         # Only enable plugin loading if installed in $HOME
         if activity.get_bundle_path()[0:len(home)] == home:
@@ -1467,7 +1467,6 @@ class TurtleArtActivity(activity.Activity):
                 errors.append(error)
             self.metadata['error_list'] = data_to_string(errors)
         _logger.debug('Wrote to file: %s' % (file_path))
-
 
     def _reload_plugin_alert(self, tmp_dir, tmp_path, plugin_path, plugin_name,
                              file_info):
